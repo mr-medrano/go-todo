@@ -7,10 +7,14 @@ import (
 	"time"
 )
 
+type Application struct{}
+
 func main() {
+	app := &Application{}
+
 	srv := &http.Server{
 		Addr:         ":9000",
-		Handler:      routes(),
+		Handler:      app.routes(),
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}

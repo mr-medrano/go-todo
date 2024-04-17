@@ -6,11 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func routes() http.Handler {
-	e := gin.New()
-	e.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, "pong")
-	})
+func (a *Application) routes() http.Handler {
+	e := gin.Default()
+	e.GET("/ping", a.ping)
 
 	return e
 }
