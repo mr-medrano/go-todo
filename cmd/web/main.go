@@ -29,12 +29,14 @@ func main() {
 
 	flag.Parse()
 
-	app := &Application{}
-
 	pgPool, err := database.NewPGXPool(context.Background(), cfg.dsn)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
+	}
+
+	app := &Application{
+		tasks: &models.TaskModel{DB: pgPool},
 	}
 
 	defer pgPool.Close()

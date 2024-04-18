@@ -22,5 +22,12 @@ func (a *Application) taskCreate(c *gin.Context) {
 		})
 	}
 
-	a.tasks.Insert(c, task.Title, task.Note)
+	id, err := a.tasks.Insert(c, task.Title, task.Note)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "INTERNALERR-1",
+			"message": err.Error(),
+		})
+	}
+	c.JSON(http.StatusCreated, gin.H{"id": id})
 }
