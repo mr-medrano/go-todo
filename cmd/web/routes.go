@@ -9,6 +9,7 @@ import (
 func (a *Application) routes() http.Handler {
 	e := gin.Default()
 	e.GET("/ping", a.ping)
+	e.POST("/tasks", a.taskCreate)
 
 	return e
 }
