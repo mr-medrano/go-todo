@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"examples.mrmedano.todo/internal/database"
+	"examples.mrmedano.todo/internal/models"
 )
 
 type config struct {
@@ -16,7 +17,9 @@ type config struct {
 	dsn  string
 }
 
-type Application struct{}
+type Application struct {
+	tasks *models.TaskModel
+}
 
 func main() {
 	var cfg config
