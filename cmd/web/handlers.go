@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"examples.mrmedano.todo/internal/validators"
+	"examples.mrmedano.todo/internal/schemas"
 )
 
 func (a *Application) ping(c *gin.Context) {
@@ -13,7 +13,7 @@ func (a *Application) ping(c *gin.Context) {
 }
 
 func (a *Application) taskCreate(c *gin.Context) {
-	var task validators.Task
+	var task schemas.Task
 
 	if err := c.ShouldBindJSON(&task); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
