@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
 
 	"examples.mrmedano.todo/internal/schemas"
 )
@@ -40,6 +41,14 @@ func (a *Application) taskView(c *gin.Context) {
 
 	task, err := a.tasks.Get(c, id)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+				"error":   "NOTFOUND-1",
+				"message": "resource not found.",
+			})
+			return
+		}
+
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"error":   "INTERNALERR-1",
 			"message": err.Error(),
