@@ -20,6 +20,7 @@ func (a *Application) taskCreate(c *gin.Context) {
 			"error":   "VALIDATEERR-1",
 			"message": "Invalid inputs",
 		})
+		return
 	}
 
 	id, err := a.tasks.Insert(c, task.Title, task.Note)
@@ -28,6 +29,23 @@ func (a *Application) taskCreate(c *gin.Context) {
 			"error":   "INTERNALERR-1",
 			"message": err.Error(),
 		})
+		return
 	}
+
 	c.JSON(http.StatusCreated, gin.H{"id": id})
+}
+
+func (a *Application) taskView(c *gin.Context) {
+	id := c.Param("id")
+
+	task, err := a.tasks.Get(c, id)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "INTERNALERR-1",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, task)
 }

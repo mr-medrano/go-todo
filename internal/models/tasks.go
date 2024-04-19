@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -37,4 +38,22 @@ func (m *TaskModel) Insert(ctx context.Context, title string, note string) (stri
 	}
 
 	return t.ID, nil
+}
+
+func (m *TaskModel) Get(ctx context.Context, id string) (*Task, error) {
+	stmt := `SELECT id, title, note, created_at, updated_at FROM tasks WHERE id::text = @id`
+	args := pgx.NamedArgs{
+		"id": id,
+	}
+	fmt.Println(args)
+	row := m.DB.QueryRow(ctx, stmt, args)
+
+	var t Task
+
+	err := row.Scan(&t.ID, &t.Title, &t.Note, &t.Created, &t.Updated)
+	if err != nil {
+		return nil, err
+	}
+
+	return &t, nil
 }
