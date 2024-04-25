@@ -10,7 +10,7 @@ import (
 )
 
 func (a *Application) ping(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "pong"})
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "pong"})
 }
 
 func (a *Application) taskCreate(c *gin.Context) {
@@ -33,7 +33,7 @@ func (a *Application) taskCreate(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"id": id})
+	c.IndentedJSON(http.StatusCreated, gin.H{"id": id})
 }
 
 func (a *Application) taskView(c *gin.Context) {
@@ -42,10 +42,7 @@ func (a *Application) taskView(c *gin.Context) {
 	task, err := a.tasks.Get(c, id)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
-				"error":   "NOTFOUND-1",
-				"message": "resource not found.",
-			})
+			c.AbortWithStatus(http.StatusNotFound)
 			return
 		}
 
@@ -56,5 +53,5 @@ func (a *Application) taskView(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, task)
+	c.IndentedJSON(http.StatusOK, task)
 }
